@@ -1,3 +1,4 @@
 <resources>
     <string name="app_name">sigovProject</string>
+    <string name="name_registrar_producto">PRODUCTO NUEVO</string>
 </resources>
