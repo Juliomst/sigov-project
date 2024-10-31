@@ -34,19 +34,21 @@ class MenuControlActivity : AppCompatActivity() {
         }
 
         findViewById<MaterialButton>(R.id.btnAgregarProducto).setOnClickListener{
-//            val intent = Intent(this, ProductSearchActivity::class.java)
-//            intent.putExtra("mode", "AGREGAR")
-//            startActivity(intent)
+            val intent = Intent(this, ManageProductForm::class.java)
+            startActivity(intent)
         }
         findViewById<MaterialButton>(R.id.btnActualizarProducto).setOnClickListener{
-//            val intent = Intent(this, ProductSearchActivity::class.java)
-//            intent.putExtra("mode", "ACTUALIZAR")
-//            startActivity(intent)
+            val intent = Intent(this, ManageProductSearchActivity::class.java)
+            intent.putExtra("mode", "ACTUALIZAR")
+            startActivity(intent)
         }
         findViewById<MaterialButton>(R.id.btnEliminarProducto).setOnClickListener{
-//            val intent = Intent(this, ProductSearchActivity::class.java)
-//            intent.putExtra("mode", "ELIMINAR")
-//            startActivity(intent)
+            val intent = Intent(this, ManageProductSearchActivity::class.java)
+            intent.putExtra("mode", "ELIMINAR")
+            startActivity(intent)
+        }
+        findViewById<MaterialButton>(R.id.btnRegresarMainMenu).setOnClickListener{
+            finish()
         }
     }
 }

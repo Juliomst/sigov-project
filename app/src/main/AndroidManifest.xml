@@ -17,10 +17,10 @@
         android:usesCleartextTraffic="true"
         tools:targetApi="31">
         <activity
-            android:name=".ProductFormActivity"
+            android:name=".ManageProductSearchActivity"
             android:exported="false" />
         <activity
-            android:name=".ProductSearchActivity"
+            android:name=".ManageProductForm"
             android:exported="false" />
         <activity
             android:name=".MenuControlActivity"
