@@ -1,8 +1,10 @@
 package mx.itson.sigovproject
 
+import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.widget.GridLayout
+import android.widget.TextView
 import android.widget.Toast
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AlertDialog
@@ -11,6 +13,7 @@ import androidx.core.view.LayoutInflaterCompat
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import androidx.lifecycle.ReportFragment.Companion.reportFragment
+import com.android.volley.DefaultRetryPolicy
 import com.android.volley.Request
 import com.android.volley.toolbox.StringRequest
 import com.android.volley.toolbox.Volley
@@ -23,8 +26,8 @@ import org.json.JSONObject
 class SelectProductActivity : AppCompatActivity() {
     private var gridProductos: GridLayout? = null
     private var btnVolverProducto: MaterialButton? = null
-    private var categoria: String = ""
     private var idOrden: String = ""
+    private var categoria: String = ""
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -33,9 +36,10 @@ class SelectProductActivity : AppCompatActivity() {
         gridProductos = findViewById(R.id.gridProductos)
         btnVolverProducto = findViewById(R.id.btnVolverProducto)
 
-        categoria = intent.getStringExtra("categoria") ?: ""
         idOrden = intent.getStringExtra("idOrden") ?: ""
-        if (categoria.isEmpty() || idOrden.isEmpty()){
+        categoria = intent.getStringExtra("categoria") ?: ""
+
+        if (idOrden.isEmpty() || categoria.isEmpty()){
             Toast.makeText(this, "Error: Datos insuficientes", Toast.LENGTH_SHORT).show()
             finish()
             return
@@ -51,86 +55,62 @@ class SelectProductActivity : AppCompatActivity() {
         }
     }
 
-    private fun mostrarDialogoAgregarProducto(producto: JSONObject){
-        val dialogView = LayoutInflater.from(this).inflate(R.layout.dialog_add_product, null)
-        val dialog = AlertDialog.Builder(this).setView(dialogView).create()
+    private fun mostrarDialogoCantidad(producto: JSONObject){
+        val dialogView = LayoutInflater.from(this).inflate(R.layout.dialog_cantidad_producto, null)
 
+        val txtCantidad = dialogView.findViewById<TextView>(R.id.txtCantidad)
+        val btnMenos = dialogView.findViewById<MaterialButton>(R.id.btnMenos)
+        val btnMas = dialogView.findViewById<MaterialButton>(R.id.btnMas)
         val etDescripcion = dialogView.findViewById<TextInputEditText>(R.id.etDescripcion)
-        val etCantidad = dialogView.findViewById<TextInputEditText>(R.id.etCantidad)
-        val btnCancelar = dialogView.findViewById<MaterialButton>(R.id.btnCancelar)
-        val btnAgregar = dialogView.findViewById<MaterialButton>(R.id.btnAgregar)
 
-        btnCancelar.setOnClickListener{
-            dialog.dismiss()
-        }
+        var cantidad = 1
+        txtCantidad.text = cantidad.toString()
 
-        btnAgregar.setOnClickListener{
-            val cantidad = etCantidad.text.toString().toIntOrNull() ?: 1
-            val descripcion = etDescripcion.text.toString()
-            agregarProductoOrden(producto.getInt("id_producto"), cantidad, descripcion)
-            dialog.dismiss()
-        }
-        dialog.show()
-    }
-
-    private fun agregarProductoOrden(idProducto: Int, cantidad: Int, descripcion: String){
-        val url = "http://192.168.56.1:8080/sigov/agregarProductoOrden.php"
-        val queue = Volley.newRequestQueue(this)
-
-        val request = object : StringRequest(
-            Request.Method.POST, url,
-            { response ->
-                try{
-                    val jsonResponse = JSONObject(response)
-                    if (jsonResponse.getString("status") == "success"){
-                        Toast.makeText(this, "Producto agregado exitosamente", Toast.LENGTH_SHORT).show()
-                    }else{
-                        Toast.makeText(this, jsonResponse.getString("message"), Toast.LENGTH_LONG).show()
-                    }
-                }catch(e: Exception){
-                    Toast.makeText(this, "Error al procesar la respuesta", Toast.LENGTH_LONG).show()
-                }
-            },
-            { error ->
-                Toast.makeText(this, "Error de conexión: ${error.message}", Toast.LENGTH_LONG).show()
-            }) {
-            override fun getParams(): MutableMap<String, String> {
-                return hashMapOf(
-                    "id_orden" to idOrden,
-                    "id_producto" to idProducto.toString(),
-                    "cantidadProducto" to cantidad.toString(),
-                    "descripcion" to descripcion
-                )
+        btnMenos.setOnClickListener{
+            if(cantidad > 1){
+                cantidad--
+                txtCantidad.text = cantidad.toString()
             }
         }
-        queue.add(request)
+
+        btnMas.setOnClickListener{
+            cantidad++
+            txtCantidad.text = cantidad.toString()
+        }
+
+        AlertDialog.Builder(this)
+            .setTitle(producto.getString("nombre"))
+            .setView(dialogView)
+            .setPositiveButton("Agregar"){ _, _ ->
+                val descripcion = etDescripcion.text?.toString() ?: ""
+                agregarProductoOrden(producto, cantidad, descripcion)
+            }
+            .setNegativeButton("Cancelar", null)
+            .show()
     }
 
     private fun cargarProductos(){
         val url = "http://192.168.56.1:8080/sigov/obtenerProductos.php"
         val queue = Volley.newRequestQueue(this)
 
-        val request = object: StringRequest(
+        val request = object : StringRequest(
             Request.Method.POST, url,
             { response ->
                 try{
-                    val jsonResponse = JSONObject(response)
-                    if (jsonResponse.getString("status") == "success"){
-                        val productos = jsonResponse.getJSONArray("data")
-                        setupProductGrid(productos)
-                    }else{
-                        Toast.makeText(this, jsonResponse.getString("message"), Toast.LENGTH_LONG).show()
-                    }
-                }catch(e: Exception){
-                    Toast.makeText(this, "Error al procesar la respuesta", Toast.LENGTH_LONG).show()
+                    val jsonResponse = JSONArray(response)
+                    setupProductGrid(jsonResponse)
+                }catch (e: Exception){
+                    Toast.makeText(this, "Error al procesar productos: ${e.message}", Toast.LENGTH_LONG).show()
+                    e.printStackTrace()
                 }
             },
             { error ->
-                Toast.makeText(this, "Error de conexión ${error.message}", Toast.LENGTH_LONG).show()
+                Toast.makeText(this, "Error de conexion: ${error.message}", Toast.LENGTH_LONG).show()
+                error.printStackTrace()
             }) {
-            override fun getParams(): MutableMap<String, String>? {
+            override fun getParams(): MutableMap<String, String> {
                 val params = HashMap<String, String>()
-                params["tipoProducto"] = categoria
+                params["categoria"] = categoria
                 return params
             }
         }
@@ -153,10 +133,68 @@ class SelectProductActivity : AppCompatActivity() {
                     setMargins(8, 8, 8, 8)
                 }
                 setOnClickListener{
-                    mostrarDialogoAgregarProducto(producto)
+                    mostrarDialogoCantidad(producto)
                 }
             }
             gridProductos?.addView(button)
         }
     }
+
+    private fun agregarProductoOrden(producto: JSONObject, cantidad: Int, descripcion: String) {
+        val url = "http://192.168.56.1:8080/sigov/agregarProductoOrden.php"
+        val queue = Volley.newRequestQueue(this)
+
+        val request = object : StringRequest(
+            Request.Method.POST, url,
+            { response ->
+                try {
+                    val jsonResponse = JSONObject(response)
+                    when (jsonResponse.getString("status")) {
+                        "success" -> {
+                            Toast.makeText(
+                                this,
+                                jsonResponse.getString("message"),
+                                Toast.LENGTH_SHORT
+                            ).show()
+                            finish()
+                        }
+                        else -> {
+                            Toast.makeText(
+                                this,
+                                "Error: ${jsonResponse.getString("message")}",
+                                Toast.LENGTH_LONG
+                            ).show()
+                        }
+                    }
+                } catch (e: Exception) {
+                    Toast.makeText(
+                        this,
+                        "Error al procesar respuesta: ${e.message}",
+                        Toast.LENGTH_LONG
+                    ).show()
+                    e.printStackTrace()
+                }
+            },
+            { error ->
+                Toast.makeText(this,
+                    "Error de conexión: ${error.message}",
+                    Toast.LENGTH_LONG
+                ).show()
+                error.printStackTrace()
+            }) {
+            override fun getParams(): MutableMap<String, String> {
+                return HashMap<String, String>().apply {
+                    put("id_orden", idOrden)
+                    put("id_producto", producto.getString("id_producto"))
+                    put("cantidadProducto", cantidad.toString())
+                    if(descripcion.isNotBlank()) {
+                        put("descripcion", descripcion.trim())
+                    }
+                }
+            }
+        }
+
+        queue.add(request)
+    }
+
 }

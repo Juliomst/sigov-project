@@ -17,13 +17,16 @@
         android:usesCleartextTraffic="true"
         tools:targetApi="31">
         <activity
-            android:name=".EliminarProducto"
+            android:name=".ProductFormActivity"
             android:exported="false" />
         <activity
-            android:name=".ActualizarProducto"
+            android:name=".ProductSearchActivity"
             android:exported="false" />
         <activity
-            android:name=".RegistrarProducto"
+            android:name=".MenuControlActivity"
+            android:exported="false" />
+        <activity
+            android:name=".OrderSummary"
             android:exported="false" />
         <activity
             android:name=".SelectProductActivity"

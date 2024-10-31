@@ -29,6 +29,10 @@ class LoginActivity : AppCompatActivity() {
     }
 
     fun clickLogin(view: View){
+        if(txtUsuario?.text.toString().trim().isEmpty() || txtContrasenaLogin?.text.toString().trim().isEmpty()){
+            Toast.makeText(this, "Por favor complete todos los campos", Toast.LENGTH_LONG).show()
+            return
+        }
         val url = "http://192.168.56.1:8080/sigov/login.php"
         val queue = Volley.newRequestQueue(this)
 
@@ -37,25 +41,30 @@ class LoginActivity : AppCompatActivity() {
             { response ->
                 try{
                     val jsonResponse = JSONObject(response)
-                    if (jsonResponse.getString("status") == "success") {
-                        val intent = Intent(this, MainMenuActivity::class.java)
-                        intent.putExtra("userData", response)
-                        startActivity(intent)
-                        finish()
-                    }else{
-                        Toast.makeText(this, jsonResponse.getString("message"), Toast.LENGTH_LONG).show()
+                    when(jsonResponse.getString("status")) {
+                        "success" -> {
+                            Toast.makeText(this, "¡Bienvenido!", Toast.LENGTH_SHORT).show()
+                            val intent = Intent(this, MainMenuActivity::class.java)
+                            intent.putExtra("userData", jsonResponse.getJSONObject("data").toString())
+                            startActivity(intent)
+                            finish()
+                        }
+                        "error" -> {
+                            Toast.makeText(this, jsonResponse.getString("message"), Toast.LENGTH_LONG).show()
+                        }
                     }
                 }catch(e: Exception){
-                    Toast.makeText(this, "Error en la respuesta", Toast.LENGTH_LONG).show()
+                    e.printStackTrace()
+                    Toast.makeText(this, "Error en la respuesta: ${e.message}", Toast.LENGTH_LONG).show()
                 }
             },
             { error ->
-                Toast.makeText(this, "Error de conexión ${error.message}", Toast.LENGTH_LONG).show()
+                Toast.makeText(this, "Error de conexión: ${error.message}", Toast.LENGTH_LONG).show()
             }){
-            override fun getParams(): MutableMap<String, String>? {
+            override fun getParams(): MutableMap<String, String> {
                 val params = HashMap<String, String>()
-                params["nickname"] = txtUsuario?.text.toString()
-                params["contrasena"] = txtContrasenaLogin?.text.toString()
+                params["nickname"] = txtUsuario?.text.toString().trim()
+                params["contrasena"] = txtContrasenaLogin?.text.toString().trim()
                 return params
             }
         }

@@ -31,6 +31,24 @@ class RegistroActivity : AppCompatActivity() {
     }
 
     fun clickRegistrar(view: View){
+        val campos = mapOf(
+            "Nombres" to txtNombres?.text.toString().trim(),
+            "Apellido" to txtApellido?.text.toString().trim(),
+            "Nombre de usuario" to txtNickname?.text.toString().trim(),
+            "Contraseña" to txtContrasena?.text.toString().trim()
+        )
+
+        for ((nombre, valor) in campos){
+            if(valor.isEmpty()){
+                Toast.makeText(this, "El campo $nombre es obligatorio", Toast.LENGTH_LONG).show()
+                return
+            }
+            if(campos["Contraseña"]!!.length < 4){
+                Toast.makeText(this, "La contraseña debe tener al menos 4 caracteres", Toast.LENGTH_LONG).show()
+                return
+            }
+        }
+
         val url = "http://192.168.56.1:8080/sigov/registro.php"
         val queue = Volley.newRequestQueue(this)
 
@@ -44,18 +62,19 @@ class RegistroActivity : AppCompatActivity() {
                         finish()
                     }
                 }catch(e: Exception){
-                    Toast.makeText(this, "Error en la respuesta", Toast.LENGTH_LONG).show()
+                    e.printStackTrace()
+                    Toast.makeText(this, "Error en la respuesta: ${e.message}", Toast.LENGTH_LONG).show()
                 }
             },
             { error ->
                 Toast.makeText(this, "Error de conexión: ${error.message}", Toast.LENGTH_LONG).show()
             }) {
-            override fun getParams(): MutableMap<String, String>? {
+            override fun getParams(): MutableMap<String, String> {
                 val params = HashMap<String, String>()
-                params["nombres"] = txtNombres?.text.toString()
-                params["apellido"] = txtApellido?.text.toString()
-                params["nickname"] = txtNickname?.text.toString()
-                params["contrasena"] = txtContrasena?.text.toString()
+                params["nombres"] = campos["Nombres"]!!
+                params["apellido"] = campos["Apellido"]!!
+                params["nickname"] = campos["Nombre de usuario"]!!
+                params["contrasena"] = campos["Contraseña"]!!
                 return params
             }
         }

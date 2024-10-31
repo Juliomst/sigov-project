@@ -9,7 +9,7 @@
     tools:context=".SelectProductActivity">
 
     <TextView
-        android:id="@+id/txtTituloProducto"
+        android:id="@+id/txtTitulo"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Nueva Orden"
@@ -20,15 +20,15 @@
         app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
-        android:id="@+id/txtSubtituloProducto"
+        android:id="@+id/txtSubtitulo"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Seleccione un producto"
-        android:textColor="@color/buttonPallette"
+        android:textColor="#FF4B55"
         android:textSize="16sp"
         android:layout_marginTop="8dp"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/txtTituloProducto" />
+        app:layout_constraintTop_toBottomOf="@id/txtTitulo" />
 
     <GridLayout
         android:id="@+id/gridProductos"
@@ -36,9 +36,9 @@
         android:layout_height="0dp"
         android:columnCount="2"
         android:layout_marginTop="24dp"
-        android:layout_marginBottom="16dp"
-        app:layout_constraintTop_toBottomOf="@id/txtSubtituloProducto"
-        app:layout_constraintBottom_toTopOf="@id/btnVolverProducto">
+        android:layout_marginBottom="24dp"
+        app:layout_constraintTop_toBottomOf="@id/txtSubtitulo"
+        app:layout_constraintBottom_toTopOf="@id/btnVolver">
     </GridLayout>
 
     <com.google.android.material.button.MaterialButton

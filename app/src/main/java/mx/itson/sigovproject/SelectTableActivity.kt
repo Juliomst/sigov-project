@@ -21,6 +21,7 @@ class SelectTableActivity : AppCompatActivity() {
     private var gridMesas: GridLayout? = null
     private var btnVolver: MaterialButton? = null
     private var idMesero: String = ""
+    private var userData: String? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -29,16 +30,24 @@ class SelectTableActivity : AppCompatActivity() {
         gridMesas = findViewById(R.id.gridMesas)
         btnVolver = findViewById(R.id.btnVolver)
 
-        val userData = intent.getStringExtra("userData")
+        userData = intent.getStringExtra("userData")
         if (userData != null){
             try{
-                val jsonUser = JSONObject(userData)
+                val jsonUser = JSONObject(userData!!)
                 idMesero = jsonUser.getString("id_mesero")
+
+                println("Datos del usuario: $userData")
+                println("ID Mesero: $idMesero")
             }catch(e: Exception){
-                Toast.makeText(this, "Error al obtener los datos del usuario", Toast.LENGTH_SHORT).show()
+                e.printStackTrace()
+                Toast.makeText(this, "Error al obtener datos: ${e.message}", Toast.LENGTH_SHORT).show()
                 finish()
                 return
             }
+        }else{
+            Toast.makeText(this, "No se recibieron datos del usuario", Toast.LENGTH_SHORT).show()
+            finish()
+            return
         }
         setupTableGrid()
         setupButtons()
@@ -77,28 +86,33 @@ class SelectTableActivity : AppCompatActivity() {
             Request.Method.POST, url,
             { response ->
                 try{
+                    println("Respuesta del servidor: $response")
                     val jsonResponse = JSONObject(response)
                     if(jsonResponse.getString("status") == "success"){
                         val idOrden = jsonResponse.getString("idOrden")
                         val intent = Intent(this, SelectCategory::class.java)
                         intent.putExtra("idOrden", idOrden)
+                        intent.putExtra("userData", userData)
                         startActivity(intent)
                         finish()
                     }else{
-                        Toast.makeText(this, jsonResponse.getString("message"), Toast.LENGTH_LONG).show()
+                        Toast.makeText(this, "Error: ${jsonResponse.getString("message")}", Toast.LENGTH_LONG).show()
                     }
                 }catch(e: Exception){
-                    Toast.makeText(this, "Error en la respuesta del servidor", Toast.LENGTH_LONG).show()
+                    Toast.makeText(this, "Error en la respuesta: ${e.message}", Toast.LENGTH_LONG).show()
+                    e.printStackTrace()
                 }
             },
             { error ->
-                Toast.makeText(this,"Error de conexión: ${error.message}", Toast.LENGTH_LONG).show()
+                Toast.makeText(this,"Error de conexión: ${error.toString()}", Toast.LENGTH_LONG).show()
+                error.printStackTrace()
             }) {
             override fun getParams(): MutableMap<String, String>? {
                 val params = HashMap<String, String>()
                 params["id_mesero"] = idMesero
                 params["noMesa"] = numeroMesa.toString()
                 params["fechaRegistro"]  = SimpleDateFormat("yyyy-MM-dd", Locale.getDefault()).format(Date())
+                println("Parametros eviados: $params")
                 return params
             }
         }

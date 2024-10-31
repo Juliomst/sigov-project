@@ -11,11 +11,25 @@ CREATE TABLE MESEROS (
     contrasena VARCHAR(25) NOT NULL
 );
 
+-- Tabla ORDENES
+CREATE TABLE ORDENES (
+    id_orden INT AUTO_INCREMENT PRIMARY KEY,
+    fechaRegistro DATE NOT NULL,
+    descripcion VARCHAR(140),
+    noMesa INT NOT NULL,
+    id_mesero INT,
+   -- id_venta INT,
+    FOREIGN KEY (id_mesero) REFERENCES MESEROS(id_mesero)
+   -- FOREIGN KEY (id_venta) REFERENCES VENTAS(id_venta)
+);
+
 -- Tabla VENTAS
 CREATE TABLE VENTAS (
     id_venta INT AUTO_INCREMENT PRIMARY KEY,
     fechaRegistro DATE NOT NULL,
-    monto FLOAT
+    monto FLOAT,
+    id_orden INT,
+    FOREIGN KEY (id_orden) REFERENCES ORDENES(id_orden)
 );
 
 -- Tabla PAGOS
@@ -43,18 +57,6 @@ CREATE TABLE TARJETAS (
     FOREIGN KEY (id_pago) REFERENCES PAGOS(id_pago)
 );
 
--- Tabla ORDENES
-CREATE TABLE ORDENES (
-    id_orden INT AUTO_INCREMENT PRIMARY KEY,
-    fechaRegistro DATE NOT NULL,
-    descripcion VARCHAR(140),
-    noMesa INT NOT NULL,
-    id_mesero INT,
-   -- id_venta INT,
-    FOREIGN KEY (id_mesero) REFERENCES MESEROS(id_mesero)
-   -- FOREIGN KEY (id_venta) REFERENCES VENTAS(id_venta)
-);
-
 -- Tabla PRODUCTOS
 CREATE TABLE PRODUCTOS (
     id_producto INT AUTO_INCREMENT PRIMARY KEY,
@@ -73,3 +75,4 @@ CREATE TABLE ORDEN_PRODUCTO (
     FOREIGN KEY (id_orden) REFERENCES ORDENES(id_orden),
     FOREIGN KEY (id_producto) REFERENCES PRODUCTOS(id_producto)
 );
+
