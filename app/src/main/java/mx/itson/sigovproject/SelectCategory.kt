@@ -78,7 +78,7 @@ class SelectCategory : AppCompatActivity() {
 
 
     private fun eliminarOrden(){
-        val url = "http://192.168.56.1:8080/sigov/eliminarOrden.php"
+        val url = BuildConfig.SERVER_IP+"eliminarOrden.php"
         val queue = Volley.newRequestQueue(this)
 
         val request = object : StringRequest(
@@ -122,7 +122,7 @@ class SelectCategory : AppCompatActivity() {
     }
 
     private fun checkForProducts(){
-        val url = "http://192.168.56.1:8080/sigov/verificarProductos.php"
+        val url = BuildConfig.SERVER_IP+"verificarProductos.php"
         val queue = Volley.newRequestQueue(this)
 
         val request = object : StringRequest(

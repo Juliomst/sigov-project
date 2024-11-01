@@ -1,7 +1,9 @@
 package mx.itson.sigovproject
 
 import android.content.Intent
+import android.media.Image
 import android.os.Bundle
+import android.widget.ImageView
 import android.widget.TextView
 import android.widget.Toast
 import androidx.activity.enableEdgeToEdge
@@ -9,6 +11,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import com.google.android.material.button.MaterialButton
+import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import org.json.JSONObject
 
 class MainMenuActivity : AppCompatActivity() {
@@ -20,6 +23,10 @@ class MainMenuActivity : AppCompatActivity() {
         setContentView(R.layout.activity_main_menu)
 
         txtNicknameMainMenu = findViewById(R.id.txtNicknameMainMenu)
+
+        findViewById<ImageView>(R.id.imgUsuario).setOnClickListener {
+            showLogoutDialog()
+        }
 
         userData = intent.getStringExtra("userData")
         if (userData != null){
@@ -53,5 +60,27 @@ class MainMenuActivity : AppCompatActivity() {
             intent.putExtra("userData", userData)
             startActivity(intent)
         }
+    }
+
+    private fun showLogoutDialog(){
+        MaterialAlertDialogBuilder(this)
+            .setTitle("Cerrar sesión")
+            .setMessage("¿Estas seguro que deseas cerrar sesión?")
+            .setNegativeButton("Cancelar"){ dialog, _ ->
+                dialog.dismiss()
+            }
+            .setPositiveButton("Cerrar sesión"){ _, _ ->
+                logout()
+            }
+            .show()
+    }
+
+    private fun logout(){
+        userData = null
+
+        val intent = Intent(this, LoginActivity::class.java)
+        intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
+        startActivity(intent)
+        finish()
     }
 }

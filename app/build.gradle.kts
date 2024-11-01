@@ -6,6 +6,9 @@ plugins {
 android {
     namespace = "mx.itson.sigovproject"
     compileSdk = 34
+    buildFeatures {
+        buildConfig = true
+    }
 
     defaultConfig {
         applicationId = "mx.itson.sigovproject"
@@ -18,7 +21,11 @@ android {
     }
 
     buildTypes {
+        debug {
+            buildConfigField ("String", "SERVER_IP", "\"http://192.168.1.103:8080/sigov/\"")
+        }
         release {
+            buildConfigField ("String", "SERVER_IP", "\"http://192.168.1.103:8080/sigov/\"")
             isMinifyEnabled = false
             proguardFiles(
                 getDefaultProguardFile("proguard-android-optimize.txt"),

@@ -65,7 +65,7 @@ class ManageProductSearchActivity : AppCompatActivity() {
     }
 
     private fun buscarProductos(query: String){
-        val url = "http://192.168.56.1:8080/sigov/buscarProductos.php"
+        val url = BuildConfig.SERVER_IP+"buscarProductos.php"
         val queue = Volley.newRequestQueue(this)
 
         val request = object: StringRequest(

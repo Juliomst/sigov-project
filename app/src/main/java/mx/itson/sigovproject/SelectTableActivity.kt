@@ -79,7 +79,7 @@ class SelectTableActivity : AppCompatActivity() {
     }
 
     private fun crearNuevaOrden(numeroMesa: Int){
-        val url = "http://192.168.56.1:8080/sigov/crearOrden.php"
+        val url = BuildConfig.SERVER_IP+"crearOrden.php"
         val queue = Volley.newRequestQueue(this)
 
         val request = object: StringRequest(

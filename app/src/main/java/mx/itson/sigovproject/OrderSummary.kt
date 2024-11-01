@@ -70,7 +70,7 @@ class OrderSummary : AppCompatActivity() {
     }
 
     private fun cargarDetallesOrden(){
-        val url = "http://192.168.56.1:8080/sigov/obtenerDetallesOrden.php"
+        val url = BuildConfig.SERVER_IP+"obtenerDetallesOrden.php"
         val queue = Volley.newRequestQueue(this)
 
         val request = object : StringRequest(

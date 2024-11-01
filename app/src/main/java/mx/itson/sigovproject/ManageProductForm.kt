@@ -146,7 +146,7 @@ class ManageProductForm : AppCompatActivity() {
     }
 
     private fun actualizarProducto() {
-        val url = "http://192.168.56.1:8080/sigov/actualizarProducto.php"
+        val url = BuildConfig.SERVER_IP+"actualizarProducto.php"
         val queue = Volley.newRequestQueue(this)
 
         val request = object : StringRequest(
@@ -182,7 +182,7 @@ class ManageProductForm : AppCompatActivity() {
     }
 
     private fun eliminarProducto() {
-        val url = "http://192.168.56.1:8080/sigov/eliminarProducto.php"
+        val url = BuildConfig.SERVER_IP+"eliminarProducto.php"
         val queue = Volley.newRequestQueue(this)
 
         val request = object : StringRequest(
@@ -254,7 +254,7 @@ class ManageProductForm : AppCompatActivity() {
     }
 
     private fun registrarProducto(){
-        val url = "http://192.168.56.1:8080/sigov/agregarProducto.php"
+        val url = BuildConfig.SERVER_IP+"agregarProducto.php"
         val queue = Volley.newRequestQueue(this)
 
         val request = object : StringRequest(

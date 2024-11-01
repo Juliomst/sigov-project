@@ -9,6 +9,7 @@ import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
+import mx.itson.sigovproject.BuildConfig
 import com.android.volley.Request
 import com.android.volley.toolbox.StringRequest
 import com.android.volley.toolbox.Volley
@@ -33,7 +34,7 @@ class LoginActivity : AppCompatActivity() {
             Toast.makeText(this, "Por favor complete todos los campos", Toast.LENGTH_LONG).show()
             return
         }
-        val url = "http://192.168.56.1:8080/sigov/login.php"
+        val url = BuildConfig.SERVER_IP+"login.php"
         val queue = Volley.newRequestQueue(this)
 
         val request = object : StringRequest(

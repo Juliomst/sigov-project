@@ -49,7 +49,7 @@ class RegistroActivity : AppCompatActivity() {
             }
         }
 
-        val url = "http://192.168.56.1:8080/sigov/registro.php"
+        val url = BuildConfig.SERVER_IP+"registro.php"
         val queue = Volley.newRequestQueue(this)
 
         val request = object: StringRequest(
