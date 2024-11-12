@@ -28,7 +28,6 @@ class SelectProductActivity : AppCompatActivity() {
     companion object {
         private const val TIMEOUT_MS = 15000
         private const val MAX_RETRIES = 1
-        private const val BASE_URL = "http://192.168.1.103:8080/sigov"
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -131,7 +130,7 @@ class SelectProductActivity : AppCompatActivity() {
     }
 
     private fun cargarProductos() {
-        val url = "$BASE_URL/obtenerProductos.php"
+        val url = BuildConfig.SERVER_IP+"obtenerProductos.php"
 
         val request = object : StringRequest(
             Method.POST,
@@ -187,7 +186,7 @@ class SelectProductActivity : AppCompatActivity() {
     }
 
     private fun agregarProductoOrden(producto: JSONObject, cantidad: Int, descripcion: String) {
-        val url = "$BASE_URL/agregarProductoOrden.php"
+        val url = BuildConfig.SERVER_IP+"agregarProductoOrden.php"
 
         // Debug logging
         Log.d("SIGOV", """

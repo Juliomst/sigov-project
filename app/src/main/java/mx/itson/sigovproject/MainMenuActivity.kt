@@ -60,6 +60,12 @@ class MainMenuActivity : AppCompatActivity() {
             intent.putExtra("userData", userData)
             startActivity(intent)
         }
+
+        findViewById<MaterialButton>(R.id.btnRegistrarVenta).setOnClickListener{
+            val intent = Intent(this, OrderListActivity::class.java)
+            intent.putExtra("userData", userData)
+            startActivity(intent)
+        }
     }
 
     private fun showLogoutDialog(){

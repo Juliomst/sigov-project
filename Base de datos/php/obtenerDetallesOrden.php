@@ -5,7 +5,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $idOrden = $mysql->real_escape_string($_POST["idOrden"]);
     
     // Obtiene la información de la orden
-    $queryOrden = "SELECT noMesa, fechaRegistro FROM ORDENES WHERE id_orden = ?";
+    $queryOrden = "SELECT noMesa, fechaRegistro, descripcion FROM ORDENES WHERE id_orden = ?";
     $stmtOrden = $mysql->prepare($queryOrden);
     $stmtOrden->bind_param("i", $idOrden);
     $stmtOrden->execute();
