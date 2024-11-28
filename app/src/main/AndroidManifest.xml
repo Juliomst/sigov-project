@@ -17,6 +17,15 @@
         android:usesCleartextTraffic="true"
         tools:targetApi="31">
         <activity
+            android:name=".SaleHistoryDetailActivity"
+            android:exported="false" />
+        <activity
+            android:name=".SalesListActivity"
+            android:exported="false" />
+        <activity
+            android:name=".SaleListActivity"
+            android:exported="false" />
+        <activity
             android:name=".SaleDetailActivity"
             android:exported="false" />
         <activity
@@ -26,19 +35,19 @@
             android:name=".ManageProductSearchActivity"
             android:exported="false" />
         <activity
-            android:name=".ManageProductForm"
+            android:name=".ManageProductFormActivity"
             android:exported="false" />
         <activity
             android:name=".MenuControlActivity"
             android:exported="false" />
         <activity
-            android:name=".OrderSummary"
+            android:name=".OrderSummaryActivity"
             android:exported="false" />
         <activity
             android:name=".SelectProductActivity"
             android:exported="false" />
         <activity
-            android:name=".SelectCategory"
+            android:name=".SelectCategoryActivity"
             android:exported="false" />
         <activity
             android:name=".SelectTableActivity"

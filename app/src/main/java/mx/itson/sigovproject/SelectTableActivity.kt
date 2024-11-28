@@ -4,10 +4,7 @@ import android.content.Intent
 import android.os.Bundle
 import android.widget.GridLayout
 import android.widget.Toast
-import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.view.ViewCompat
-import androidx.core.view.WindowInsetsCompat
 import com.android.volley.Request
 import com.android.volley.toolbox.StringRequest
 import com.android.volley.toolbox.Volley
@@ -90,7 +87,7 @@ class SelectTableActivity : AppCompatActivity() {
                     val jsonResponse = JSONObject(response)
                     if(jsonResponse.getString("status") == "success"){
                         val idOrden = jsonResponse.getString("idOrden")
-                        val intent = Intent(this, SelectCategory::class.java)
+                        val intent = Intent(this, SelectCategoryActivity::class.java)
                         intent.putExtra("idOrden", idOrden)
                         intent.putExtra("userData", userData)
                         startActivity(intent)

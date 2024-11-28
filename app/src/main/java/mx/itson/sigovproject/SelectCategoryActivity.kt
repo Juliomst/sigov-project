@@ -5,17 +5,14 @@ import android.os.Bundle
 import android.view.View
 import android.widget.ImageButton
 import android.widget.Toast
-import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.view.ViewCompat
-import androidx.core.view.WindowInsetsCompat
 import com.android.volley.Request
 import com.android.volley.toolbox.StringRequest
 import com.android.volley.toolbox.Volley
 import com.google.android.material.button.MaterialButton
 import org.json.JSONObject
 
-class SelectCategory : AppCompatActivity() {
+class SelectCategoryActivity : AppCompatActivity() {
     private var btnComida: ImageButton? = null
     private var btnBebida: ImageButton? = null
     private var btnPostre: ImageButton? = null
@@ -68,7 +65,7 @@ class SelectCategory : AppCompatActivity() {
             eliminarOrden()
         }
         btnFinalizarOrden?.setOnClickListener{
-            val intent = Intent(this, OrderSummary::class.java)
+            val intent = Intent(this, OrderSummaryActivity::class.java)
             intent.putExtra("idOrden", idOrden)
             intent.putExtra("userData", userData)
             startActivity(intent)

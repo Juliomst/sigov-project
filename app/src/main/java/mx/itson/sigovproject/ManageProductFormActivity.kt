@@ -6,11 +6,8 @@ import android.widget.ArrayAdapter
 import android.widget.AutoCompleteTextView
 import android.widget.TextView
 import android.widget.Toast
-import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.view.ViewCompat
-import androidx.core.view.WindowInsetsCompat
 import com.android.volley.Request
 import com.android.volley.VolleyLog.TAG
 import com.android.volley.toolbox.StringRequest
@@ -18,9 +15,8 @@ import com.android.volley.toolbox.Volley
 import com.google.android.material.button.MaterialButton
 import com.google.android.material.textfield.TextInputEditText
 import org.json.JSONObject
-import retrofit2.http.Tag
 
-class ManageProductForm : AppCompatActivity() {
+class ManageProductFormActivity : AppCompatActivity() {
     private var etNombre: TextInputEditText? = null
     private var etPrecio: TextInputEditText? = null
     private var spinnerTipoProducto: AutoCompleteTextView? = null

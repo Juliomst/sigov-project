@@ -5,8 +5,6 @@ import android.os.Bundle
 import android.widget.TextView
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.view.ViewCompat
-import androidx.core.view.WindowInsetsCompat
 import com.google.android.material.button.MaterialButton
 import org.json.JSONObject
 
@@ -34,7 +32,7 @@ class MenuControlActivity : AppCompatActivity() {
         }
 
         findViewById<MaterialButton>(R.id.btnAgregarProducto).setOnClickListener{
-            val intent = Intent(this, ManageProductForm::class.java)
+            val intent = Intent(this, ManageProductFormActivity::class.java)
             startActivity(intent)
         }
         findViewById<MaterialButton>(R.id.btnActualizarProducto).setOnClickListener{
